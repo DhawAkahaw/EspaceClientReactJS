@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 class DemandForm extends Component {
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -12,7 +14,6 @@ class DemandForm extends Component {
       Tel:''// Adding clientId to the state
     };
   }
-
   componentDidMount() {
     axios.get('api/currentuser')
       .then(response => {
@@ -42,19 +43,21 @@ class DemandForm extends Component {
     });
   };
 
-  handleSubmit = async event => {
-    event.preventDefault();
+  handleSubmit = async (e) => {
+    e.preventDefault();
   
-    const { Reference, Motif_demand, Message, clientId } = this.state;
+    const { Reference, Motif_demand, Message, clientId ,Tel} = this.state;
   
     try {
       const responseCurrentUser = await axios.get('api/currentuser');
       const userId = responseCurrentUser.data.currentuser._id;
+      const tel = responseCurrentUser.data.currentuser.tel;
       const response = await axios.post(`/api/Submitdemand/${userId}`, {
         Reference,
         Motif_demand,
         Message,
-        clientId
+        clientId,
+        tel
       });
   
       if (response.status === 201) {
@@ -85,15 +88,16 @@ class DemandForm extends Component {
             <div className="mb-3 row">
               <label htmlFor="Reference" className="col-sm-3 col-form-label">Reference</label>
               <div className="col-sm-9">
-                <input
-                  type="text"
-                  className="form-control"
-                  id="Reference"
+              <select
                   name="Reference"
+                  className="form-control"
                   value={Reference}
                   onChange={this.handleInputChange}
-                  required
-                />
+                >
+                  <option value="">Chosir le motif demande</option>
+                  <option value={Tel}>{Tel}</option>
+                
+                </select>
               </div>
             </div>
             <div className="mb-3 row">
@@ -102,12 +106,12 @@ class DemandForm extends Component {
                 <select
                   name="Motif_demand"
                   className="form-control"
-                  value={Tel}
+                  value={Motif_demand}
                   onChange={this.handleInputChange}
                 >
                   <option value="">Chosir le motif demande</option>
                   <option value="Demande Activation IPV6">Demande Activation IPV6</option>
-                  <option value="Demande de suspensionDemande de suspension">Demande de suspension</option>
+                  <option value="Demande de suspension">Demande de suspension</option>
                   <option value="Demande édition facture">Demande édition facture</option>
                   <option value="Demande de paramètres">Demande de paramètres</option>
                   <option value="Demande changement de raison sociale">Demande changement de raison sociale</option>
