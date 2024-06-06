@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 
 
 
-export default function Profile() {
+export default function Reclamation() {
     const [loading, setLoading] = useState(true);
 
     const [formData, setFormData] = useState({
@@ -103,13 +103,17 @@ export default function Profile() {
                 }
             });
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 swal("", response.data.message, "success");
-                this.setState({
-                  offre: '',
-                  Motif_demand: '',
-                  Message: ''
-                });
+                setFormData({
+                    offre:'',
+                    Service:'',
+                    Category:'',
+                    Motif_rec:'',
+                    Image:'',
+                    Message:'',
+                    
+                })
             }
         } catch (error) {
             console.error('Error:', error);
@@ -147,8 +151,8 @@ export default function Profile() {
                                             <div className="col-lg-3 col-md-3">Offre*</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                <select name="offre" className="form-control" required="" aria-required="true" onChange={(e) => setFormData({ ...formData, offre: e.target.value })}>
-                                                        <option value='0'>Choisir l'Offre</option>
+                                                <select name="offre" className="form-control" required="" value={formData.offre} aria-required="true" onChange={(e) => setFormData({ ...formData, offre: e.target.value })}>
+                                                        <option value='0'selected >Choisir l'Offre</option>
                                                         <option value={formData.tel}>{formData.tel}</option>
                                                       
                                                     </select>
@@ -160,8 +164,8 @@ export default function Profile() {
                                             <div className="col-lg-3 col-md-3">Service*</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <select name="Service" className="form-control" required="" aria-required="true" onChange={(e) => setFormData({ ...formData, Service: e.target.value })}>
-                                                        <option value='0'>Choisir le Service</option>
+                                                    <select name="Service" className="form-control" required="" value={formData.Service} aria-required="true" onChange={(e) => setFormData({ ...formData, Service: e.target.value })}>
+                                                        <option value='0'selected>Choisir le Service</option>
                                                         <option value='1'>Commerciale</option>
                                                         <option value='2'>Technique</option>
                                                     </select>
@@ -174,7 +178,7 @@ export default function Profile() {
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
                                                     <select
-                                                        name="categorie" className="form-control" required="" aria-required="true" onChange={(e) => setFormData({ ...formData, Category: e.target.value })}>
+                                                        name="categorie" className="form-control" required="" aria-required="true" value={formData.Category} onChange={(e) => setFormData({ ...formData, Category: e.target.value })}>
                                                         <option value="0"  selected>Sélectionnez une categorie</option>
                                                         <option value="gen" >Generalite</option>
                                                         <option value="ads"  >ADSL&Options</option>
@@ -189,7 +193,7 @@ export default function Profile() {
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
                                                 <select
-                                                        name="Motif" className="form-control" required="" aria-required="true" onChange={(e) => setFormData({ ...formData, Motif_rec: e.target.value })}>
+                                                        name="Motif" className="form-control" required="" aria-required="true" value={formData.Motif_rec}onChange={(e) => setFormData({ ...formData, Motif_rec: e.target.value })}>
                                                         <option value="0"  selected>Sélectionnez une categorie</option>
                                                         <option value="faccon" >Facture non conforme (prix non adéquat)</option>
                                                         <option value="nof"  >Non réception facture</option>
@@ -208,8 +212,8 @@ export default function Profile() {
 
                                                                 <div className="col-lg-9 col-md-9">
                                                                     <div className="text-left">
-
-                                                                        <input type="file" name="picture" onChange={handleImage} />          
+                                                                    
+                                                                        <input type="file" value={formData.Image} name="picture" onChange={handleImage} />          
 
                                                                     </div>
                                                                 </div>
@@ -239,6 +243,7 @@ export default function Profile() {
                                             className="form-control"
                                             rows="5"
                                             placeholder="Type something..."
+                                            value={formData.Message}
                                             onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
                                           />
                                         </div>
@@ -257,7 +262,7 @@ export default function Profile() {
                     </div>
 
                     <div className='col-sm-4 mt-5 text-right'>
-                        <button type="submit" >Modifier</button>
+                        <button type="submit" >Envoyer</button>
                     </div>
                     </>
             )}

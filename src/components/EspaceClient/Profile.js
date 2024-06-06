@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
  import Loading from '../Loading';
  import axios from "axios";
 import swal from 'sweetalert';
-
 import { GovDeleg } from './GovDeleg';
 
 export default function Profile() {

@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 import { GovDeleg } from '../GovDeleg';
 
 
-export default function Profile() {
+export default function Line() {
     const [loading, setLoading] = useState(true);
 
     const [formData, setFormData] = useState({
@@ -33,6 +33,18 @@ export default function Profile() {
         Ticket:'',
         State:'',
         client_id:'',
+        
+    });
+    const [formSave, setFormSave] = useState({
+        
+        
+        rue: '',
+        gouvernorat: '',
+        delegation: '',
+        localite: '',
+        ville: '',
+        code_postal: '',
+    
         
     });
 
@@ -65,6 +77,17 @@ export default function Profile() {
                         code_Client: res.data.currentuser.code_Client,
                         type_Client: res.data.currentuser.type_Client,
                         id: res.data.currentuser._id
+                    }));
+                    setFormSave(prevState => ({
+                        ...prevState,
+                       
+                        rue: res.data.currentuser.rue,
+                        gouvernorat: res.data.currentuser.gouvernorat,
+                        delegation: res.data.currentuser.delegation,
+                        localite: res.data.currentuser.localite,
+                        ville: res.data.currentuser.ville,
+                        code_postal: res.data.currentuser.code_postal,
+                        
                     }));
                     setToken(token);
                     setLoading(false);
@@ -105,12 +128,32 @@ export default function Profile() {
                 }
             });
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 swal("", response.data.message, "success");
-                this.setState({
-                  offre: '',
-                  Motif_demand: '',
-                  Message: ''
+                setFormData({
+                    name: '',
+                    lastName: '',
+                    tel: '',
+                    rue: '',
+                    gouvernorat: '',
+                    delegation: '',
+                    localite: '',
+                    ville: '',
+                    code_postal: '',
+                    gsm: '',
+                    login: '',
+                    password: '',
+                    code_Client: '',
+                    type_Client: '',
+                    id: '',
+                    adsl_num:'',
+                    new_num_tel:'',
+                    prev_num:'',
+                    Remarque:'',
+                    Ticket:'',
+                    State:'',
+                    
+                    
                 });
             }
         } catch (error) {
@@ -167,7 +210,7 @@ export default function Profile() {
                                             <div className="col-sm-2 control-label">Numéro ADSL *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                <select name="offre" className="form-control" required="" aria-required="true" onChange={(e) => setFormData({ ...formData, adsl_num: e.target.value })} >
+                                                <select name="offre" className="form-control" required="" aria-required="true"value={formData.adsl_num} onChange={(e) => setFormData({ ...formData, adsl_num: e.target.value })} >
                                                         <option value='0'>Choisir le numero</option>
                                                         <option value={formData.tel}>{formData.tel}</option>
                                                       
@@ -187,6 +230,7 @@ export default function Profile() {
                                                         id="num"
                                                         required=""
                                                         aria-required="true"
+                                                        value={formData.new_num_tel}
                                                         onChange={(e) => setFormData({ ...formData, new_num_tel: e.target.value })}
                                                     />
                                                 </div>
@@ -240,10 +284,10 @@ export default function Profile() {
                                                         className="form-control"
                                                         name="rue"
                                                         id="rue"
-                                                        value={formData.rue}
+                                                        value={formSave.rue}
                                                         required=""
                                                         aria-required="true"
-                                                        onChange={(e) => setFormData({ ...formData, rue: e.target.value })}
+                                                        
                                                     />
                                                 </div>
                                             </div>
@@ -253,11 +297,9 @@ export default function Profile() {
                                             <div className="col-sm-2 control-label">Gouvernorat *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <select name="gouvernorat" className="form-control" required="" aria-required="true" value={formData.gouvernorat} onChange={(e) => setFormData({ ...formData, gouvernorat: e.target.value })}>
-                                                        <option value="" disabled selected>Sélectionnez un gouvernorat</option>
-                                                        {Object.keys(citiesByGovernorate).map((gov, index) => (
-                                                            <option key={index} value={gov}>{gov}</option>
-                                                        ))}
+                                                    <select name="gouvernorat" className="form-control" required="" aria-required="true" value={formSave.gouvernorat} >
+                                                        <option value=""  selected>{formSave.gouvernorat}</option>
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
@@ -272,13 +314,10 @@ export default function Profile() {
                                                         className="form-control"
                                                         required=""
                                                         aria-required="true"
-                                                        value={formData.delegation}
-                                                        onChange={(e) => setFormData({ ...formData, delegation: e.target.value })}
+                                                        value={formSave.delegation}
                                                     >
-                                                        <option value="" disabled selected>Sélectionnez une délégation</option>
-                                                        {formData.gouvernorat && citiesByGovernorate[formData.gouvernorat] && citiesByGovernorate[formData.gouvernorat].map((deleg, index) => (
-                                                            <option key={index} value={deleg}>{deleg}</option>
-                                                        ))}
+                                                        <option value="" selected>{formSave.delegation}</option>
+                                                        
                                                     </select>
                                                 </div>
                                             </div>
@@ -288,7 +327,7 @@ export default function Profile() {
                                             <div className="col-sm-2 control-label">Ville *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="ville" id="ville" value={formData.ville} required="" aria-required="true" onChange={(e) => setFormData({ ...formData, ville: e.target.value })} />
+                                                    <input type="text" className="form-control" name="ville" id="ville" value={formSave.ville} required="" aria-required="true"  />
                                                 </div>
                                             </div>
                                         </div>
@@ -297,7 +336,7 @@ export default function Profile() {
                                             <div className="col-sm-2 control-label">Code postal *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="code_postal" id="code_postal" value={formData.code_postal} required="" aria-required="true" onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })} />
+                                                    <input type="text" className="form-control" name="code_postal" id="code_postal" value={formSave.code_postal} required="" aria-required="true"  />
                                                 </div>
                                             </div>
                                         </div>
@@ -322,7 +361,7 @@ export default function Profile() {
                                                         className="form-control"
                                                         name="rue"
                                                         id="rue"
-                                                        
+                                                        value={formData.rue}
                                                         required=""
                                                         aria-required="true"
                                                         onChange={(e) => setFormData({ ...formData, rue: e.target.value })}
@@ -335,7 +374,7 @@ export default function Profile() {
                                             <div className="col-sm-2 control-label">Gouvernorat *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <select name="gouvernorat" className="form-control" required="" aria-required="true"  onChange={(e) => setFormData({ ...formData, gouvernorat: e.target.value })}>
+                                                    <select name="gouvernorat" value={formData.gouvernorat}className="form-control" required="" aria-required="true"  onChange={(e) => setFormData({ ...formData, gouvernorat: e.target.value })}>
                                                         <option value=""  selected>Sélectionnez un gouvernorat</option>
                                                         {Object.keys(citiesByGovernorate).map((gov, index) => (
                                                             <option key={index} value={gov}>{gov}</option>
@@ -354,7 +393,7 @@ export default function Profile() {
                                                         className="form-control"
                                                         required=""
                                                         aria-required="true"
-                                                        
+                                                        value={formData.delegation}
                                                         onChange={(e) => setFormData({ ...formData, delegation: e.target.value })}
                                                     >
                                                         <option value="" selected>Sélectionnez une délégation</option>
@@ -370,7 +409,7 @@ export default function Profile() {
                                             <div className="col-sm-2 control-label">Ville *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="ville" id="ville"  required="" aria-required="true" onChange={(e) => setFormData({ ...formData, ville: e.target.value })} />
+                                                    <input type="text" className="form-control" name="ville" id="ville"  required="" aria-required="true" value={formData.ville}onChange={(e) => setFormData({ ...formData, ville: e.target.value })} />
                                                 </div>
                                             </div>
                                         </div>
@@ -379,7 +418,7 @@ export default function Profile() {
                                             <div className="col-sm-2 control-label">Code postal *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="code_postal" id="code_postal"  required="" aria-required="true" onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })} />
+                                                    <input type="text" className="form-control" name="code_postal" id="code_postal"  required="" aria-required="true" value={formData.code_postal}onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })} />
                                                 </div>
                                             </div>
                                         </div>
