@@ -21,17 +21,16 @@ export default function Suggestion() {
         code_Client: '',
         type_Client: '',
         id: '',
-        Sugg_context:'',
-        Subject:'',
-        Message:'',
-        Ticket:'',
-        client_id:'',
+        Sugg_context: '',
+        Subject: '',
+        Message: '',
+        Ticket: '',
+        client_id: '',
     });
     const [token, setToken] = useState('');
 
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
-        // Fetch current user data
         axios.get('api/currentuser')
             .then(res => {
                 if (res.data.status === 200) {
@@ -49,18 +48,14 @@ export default function Suggestion() {
                         gsm: res.data.currentuser.gsm,
                         login: res.data.currentuser.login,
                         password: res.data.currentuser.password,
-                        picture: res.data.currentuser.picture,
                         code_Client: res.data.currentuser.code_Client,
                         type_Client: res.data.currentuser.type_Client,
-                        id: res.data.currentuser._id,
-                         
+                        id: res.data.currentuser._id
                     }));
                     setToken(token);
                     setLoading(false);
                 } else if (res.data.status === 404) {
-                    // If user not found, show an error message
                     swal("", res.data.message, "error");
-                    
                 }
             })
             .catch(error => {
@@ -78,31 +73,25 @@ export default function Suggestion() {
             });
 
             const response = await axios.post(`api/Submitsuggestion/${formData.id}`, formDataToSend, {
-                
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'X-CSRF-TOKEN': token,
                     'Authorization': `Bearer ${token}`
                 }
             });
-           
 
             if (response.status === 201) {
                 swal("", response.data.message, "success");
-                // Reset formData state
                 setFormData({
-                    Sugg_context:'',
-                    Subject:'',
-                    Message:'',
-                    
+                    ...formData,
+                    Sugg_context: '',
+                    Subject: '',
+                    Message: '',
                 });
-                
             }
         } catch (error) {
             console.error('Error:', error);
         }
-        
-        
     };
 
     if (loading) {
@@ -110,73 +99,66 @@ export default function Suggestion() {
     }
 
     return (
-        <form className="row justify-content-center" onSubmit={handleSubmit}>
-            <div className="col-md-12">
-                <div className="card mt-5">
-                    <div className="card-body">
-                        <div className="ibox float-e-margins">
-                            <div className="ibox-title mb-5">
-                                <strong>Ajouter une nouvelle suggestion</strong>
+        <div className="container mt-5">
+            <form className="row justify-content-center" onSubmit={handleSubmit}>
+                <div className="col-md-12">
+                    <div className="card shadow-sm">
+                        <div className="card-header text-center">
+                            <h4>Ajouter une nouvelle suggestion</h4>
+                        </div>
+                        <div className="card-body">
+                            <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Contexte de suggestion *</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <select
+                                        name="Sugg_context"
+                                        className="form-control"
+                                        required
+                                        value={formData.Sugg_context}
+                                        onChange={(e) => setFormData({ ...formData, Sugg_context: e.target.value })}
+                                    >
+                                        <option value="0" selected>Sélectionnez une catégorie</option>
+                                        <option value="Commerciale">Commerciale</option>
+                                        <option value="Technique">Technique</option>
+                                    </select>
+                                </div>
                             </div>
-                            <div className="ibox-content no-padding">
-                                <div className="row">
-                                    <div className="col-lg-3 col-md-3">Contexte de suggestion *</div>
-                                    <div className="col-lg-9 col-md-9">
-                                        <div className="text-left">
-                                            <select
-                                                name="Sugg"
-                                                className="form-control"
-                                                required
-                                                aria-required="true"
-                                                value={formData.Sugg_context}
-                                                onChange={(e) => setFormData({ ...formData, Sugg_context: e.target.value })}
-                                            >
-                                                <option value="0" selected>Sélectionnez une categorie</option>
-                                                <option value="Commerciale">Commerciale</option>
-                                                <option value="Technique">Technique</option>
-                                            </select>
-                                        </div>
-                                    </div>
+
+                            <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Sujet *</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="Subject"
+                                        required
+                                        value={formData.Subject}
+                                        onChange={(e) => setFormData({ ...formData, Subject: e.target.value })}
+                                    />
                                 </div>
-                                <div className="row mt-3">
-                                    <div className="col-lg-3 col-md-3">Sujet *</div>
-                                    <div className="col-lg-9 col-md-9">
-                                        <div className="text-right">
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                name="sujet"
-                                                id="sujet"
-                                                required
-                                                value={formData.Subject}
-                                                aria-required="true"
-                                                onChange={(e) => setFormData({ ...formData, Subject: e.target.value })}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="mb-3 row">
-                                    <label htmlFor="Message" className="col-sm-3 col-form-label">Message *</label>
-                                    <div className="col-sm-9">
-                                        <textarea
-                                            id="Message"
-                                            name="Message"
-                                            className="form-control"
-                                            rows="5"
-                                            value={formData.Message}
-                                            placeholder="Type something..."
-                                            onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
-                                        />
-                                    </div>
+                            </div>
+
+                            <div className="mb-3 row">
+                                <label htmlFor="Message" className="col-lg-3 col-md-3 col-form-label">Message *</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <textarea
+                                        id="Message"
+                                        name="Message"
+                                        className="form-control"
+                                        rows="5"
+                                        placeholder="Type something..."
+                                        value={formData.Message}
+                                        onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
+                                    />
                                 </div>
                             </div>
                         </div>
+                        <div className="card-footer text-right">
+                            <button type="submit" className="btn btn-primary">Envoyer</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div className="col-sm-4 mt-5 text-right">
-                <button type="submit">Modifier</button>
-            </div>
-        </form>
+            </form>
+        </div>
     );
 }

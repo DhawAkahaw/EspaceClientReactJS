@@ -23,6 +23,17 @@ export default function Migrations() {
             });
     }, []);
     
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear().toString().slice(-2);
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
+
+
     return (
         <div className="align-items-center justify-content-between mb-4">
             <MaterialTable
@@ -41,7 +52,7 @@ export default function Migrations() {
                         render: rowData => <p>{rowData.desired_offre}</p>
                     }, {
                         title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Date de création	</h6>,
-                        render: rowData => <p>{rowData.created_at}</p>
+                        render: rowData => <p>{formatDate(rowData.created_at)}</p>
                     },
                     {
                         title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Gsm</h6>,
@@ -55,7 +66,7 @@ export default function Migrations() {
                    
                 ]}
                 data={migration}
-                title={<h4>Mes migrations</h4>}
+                title={<h4>Historique des demandes de migration</h4>}
                 icons={tableIcons} // Use the imported tableIcons
                 options={{
                     padding: 'dense',

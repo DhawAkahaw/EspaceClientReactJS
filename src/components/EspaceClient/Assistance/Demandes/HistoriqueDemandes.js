@@ -7,56 +7,75 @@ export default function Demands() {
     const [demand, setDemand] = useState([]);
 
     useEffect(() => {
-        axios.get('api/currentuser')
-            .then(response => {
-                const userId = response.data.currentuser._id;
-                axios.get(`api/Demands/${userId}`)
-                    .then(response => {
-                        setDemand(response.data.demand);
-                    })
-                    .catch(error => {
-                        console.error('Error fetching demands:', error);
-                    });
-            })
-            .catch(error => {
-                console.error('Error fetching current user:', error);
-            });
+        const fetchData = async () => {
+            try {
+                const currentUserResponse = await axios.get('api/currentuser');
+                const userId = currentUserResponse.data.currentuser._id;
+                const demandsResponse = await axios.get(`api/Demands/${userId}`);
+                setDemand(demandsResponse.data.demand);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData();
     }, []);
     
+    // Function to format date string
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const formattedDate = date.toLocaleDateString('en-US', { year: '2-digit', month: '2-digit', day: '2-digit' });
+        return formattedDate;
+    };
+
     return (
-        <div className="align-items-center justify-content-between mb-4">
+        <div style={{ maxWidth: '100%' }}>
             <MaterialTable
                 columns={[
                     {
-                        title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Ticket</h6>,
-                        render: rowData => <p>{rowData.Ticket}</p>,
-                        customFilterAndSearch: (term, rowData) => ((rowData.Ticket).toLowerCase()).indexOf(term.toLowerCase()) !== -1
+                        title: 'Ticket',
+                        field: 'Ticket',
+                        render: rowData => <div style={{ fontSize: '14px' }}>{rowData.Ticket}</div>,
+                        customFilterAndSearch: (term, rowData) => ((rowData.Ticket || '').toLowerCase()).indexOf(term.toLowerCase()) !== -1
                     },
                     {
-                        title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Service</h6>,
-                        render: rowData => <p>{rowData.Service}</p>
+                        title: 'Service',
+                        field: 'Service',
+                        render: rowData => <div style={{ fontSize: '14px' }}>{rowData.Service}</div>
                     },
                     {
-                        title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Motif</h6>,
-                        render: rowData => <p>{rowData.Motif_demand}</p>
+                        title: 'Motif',
+                        field: 'Motif_demand',
+                        render: rowData => <div style={{ fontSize: '14px' }}>{rowData.Motif_demand}</div>
                     },
                     {
-                        title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Date de création	</h6>,
-                        render: rowData => <p>{rowData.created_at}</p>
+                        title: 'Date de création',
+                        field: 'created_at',
+                        render: rowData => <div style={{ fontSize: '14px' }}>{formatDate(rowData.created_at)}</div>
                     },
                     {
-                        title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Etat</h6>,
-                        render: rowData => <p>{rowData.State}</p>
+                        title: 'Etat',
+                        field: 'State',
+                        render: rowData => (
+                            <div style={{ display: 'flex', alignItems: 'center', fontSize: '14px' }}>
+                                <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'green', marginRight: 8 }}></div>
+                                <span style={{ color: 'green', textShadow: '0px 0px 10px green' }}>{rowData.State}</span>
+                            </div>
+                        )
                     },
-                   
                 ]}
                 data={demand}
-                title={<h4>Mes demands</h4>}
+                title="Historique des demandes"
                 icons={tableIcons} // Use the imported tableIcons
                 options={{
                     padding: 'dense',
                     pageSize: 4,
                     pageSizeOptions: [2, 3, 4],
+                    headerStyle: {
+                        backgroundColor: '#f48404',
+                        color: '#fff',
+                        fontSize: '16px'
+                    }
                 }}
             />
         </div>

@@ -1,15 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
-
- import Loading from './/Loading';
- import axios from "axios";
+import Loading from './Loading';
+import axios from "axios";
 import swal from 'sweetalert';
-
-
 
 export default function Reclamation() {
     const [loading, setLoading] = useState(true);
-
     const [formData, setFormData] = useState({
         name: '',
         lastName: '',
@@ -38,14 +33,11 @@ export default function Reclamation() {
     });
     const [token, setToken] = useState('');
 
-
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
-        // Fetch current user data
         axios.get('api/currentuser')
             .then(res => {
                 if (res.data.status === 200) {
-
                     setFormData(prevState => ({
                         ...prevState,
                         name: res.data.currentuser.name,
@@ -67,9 +59,7 @@ export default function Reclamation() {
                     }));
                     setToken(token);
                     setLoading(false);
-
                 } else if (res.data.status === 404) {
-                    // If user not found, show an error message
                     swal("", res.data.message, "error");
                 }
             })
@@ -84,11 +74,10 @@ export default function Reclamation() {
             picture: e.target.files[0]
         }));
     };
-      
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const formDataToSend = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
@@ -112,166 +101,141 @@ export default function Reclamation() {
                     Motif_rec:'',
                     Image:'',
                     Message:'',
-                    
-                })
+                });
             }
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
-    // Function to get cities by governorate
-  
-
-
     if (loading) {
-        <Loading />
+        return <Loading />;
     }
 
     return (
+        <div className="container mt-5">
+            <form className="row justify-content-center" onSubmit={handleSubmit}>
+                <div className="col-md-12">
+                    <div className="card shadow-sm">
+                        <div className="card-header text-center">
+                            <h4>Ajouter une nouvelle réclamation</h4>
+                        </div>
+                        <div className="card-body">
+                            <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Offre*</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <select
+                                        name="offre"
+                                        className="form-control"
+                                        required
+                                        value={formData.offre}
+                                        onChange={(e) => setFormData({ ...formData, offre: e.target.value })}
+                                    >
+                                        <option value="0" selected>Choisir l'Offre</option>
+                                        <option value={formData.tel}>{formData.tel}</option>
+                                    </select>
+                                </div>
+                            </div>
 
+                            <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Service*</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <select
+                                        name="Service"
+                                        className="form-control"
+                                        required
+                                        value={formData.Service}
+                                        onChange={(e) => setFormData({ ...formData, Service: e.target.value })}
+                                    >
+                                        <option value="0" selected>Choisir le Service</option>
+                                        <option value="Commerciale">Commerciale</option>
+                                        <option value="Technique">Technique</option>
+                                    </select>
+                                </div>
+                            </div>
 
+                            <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Categorie*</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <select
+                                        name="categorie"
+                                        className="form-control"
+                                        required
+                                        value={formData.Category}
+                                        onChange={(e) => setFormData({ ...formData, Category: e.target.value })}
+                                    >
+                                        <option value="0" selected>Sélectionnez une categorie</option>
+                                        <option value="Generalite">Generalite</option>
+                                        <option value="ADSL&Options">ADSL&Options</option>
+                                    </select>
+                                </div>
+                            </div>
 
-        <form className="row justify-content-center" onSubmit={handleSubmit}>
-            {loading ? (
-                <Loading />
-                ) : (
-                <>
-                    <div className="col-md-12">
-                       
-                        <div className="card mt-5">
-                            <div className="card-body">
-                                <div className="ibox float-e-margins">
-                                    <div className="ibox-title mb-5">
-                                        <strong>Informations du compte</strong>
-                                    </div>
-                                    -----------------------------
-                                    <div className="ibox-content no-padding">
-                                        <div className="row">
-                                            <div className="col-lg-3 col-md-3">Offre*</div>
-                                            <div className="col-lg-9 col-md-9">
-                                                <div className="text-right">
-                                                <select name="offre" className="form-control" required="" value={formData.offre} aria-required="true" onChange={(e) => setFormData({ ...formData, offre: e.target.value })}>
-                                                        <option value='0'selected >Choisir l'Offre</option>
-                                                        <option value={formData.tel}>{formData.tel}</option>
-                                                      
-                                                    </select>
-                                                </div>
-                                            </div>
-                                          </div>
---------------------------------------------------------
-                                        <div className="row mt-3">
-                                            <div className="col-lg-3 col-md-3">Service*</div>
-                                            <div className="col-lg-9 col-md-9">
-                                                <div className="text-right">
-                                                    <select name="Service" className="form-control" required="" value={formData.Service} aria-required="true" onChange={(e) => setFormData({ ...formData, Service: e.target.value })}>
-                                                        <option value='0'selected>Choisir le Service</option>
-                                                        <option value='1'>Commerciale</option>
-                                                        <option value='2'>Technique</option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
----------------------------------------------------------
-                                        <div className="row mt-3">
-                                            <div className="col-lg-3 col-md-3">Categorie*</div>
-                                            <div className="col-lg-9 col-md-9">
-                                                <div className="text-right">
-                                                    <select
-                                                        name="categorie" className="form-control" required="" aria-required="true" value={formData.Category} onChange={(e) => setFormData({ ...formData, Category: e.target.value })}>
-                                                        <option value="0"  selected>Sélectionnez une categorie</option>
-                                                        <option value="gen" >Generalite</option>
-                                                        <option value="ads"  >ADSL&Options</option>
-                      
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-------------------------------------------------------------
-                                        <div className="row mt-3">
-                                            <div className="col-lg-3 col-md-3">Motif de reclamation</div>
-                                            <div className="col-lg-9 col-md-9">
-                                                <div className="text-right">
-                                                <select
-                                                        name="Motif" className="form-control" required="" aria-required="true" value={formData.Motif_rec}onChange={(e) => setFormData({ ...formData, Motif_rec: e.target.value })}>
-                                                        <option value="0"  selected>Sélectionnez une categorie</option>
-                                                        <option value="faccon" >Facture non conforme (prix non adéquat)</option>
-                                                        <option value="nof"  >Non réception facture</option>
-                      
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-----------------------------------------------------
-                                                    
-                                                      <div className="card-body">
-                                                    <div className="ibox float-e-margins">
-                                                        
-                                                        <div className="ibox-content no-padding">
-                                                            <div className="row">
+                            <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Motif de réclamation*</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <select
+                                        name="Motif"
+                                        className="form-control"
+                                        required
+                                        value={formData.Motif_rec}
+                                        onChange={(e) => setFormData({ ...formData, Motif_rec: e.target.value })}
+                                    >
+                                        <option value="0" selected>Sélectionnez un motif</option>
+                                        <option value="Facture non conforme (prix non adéquat)">Facture non conforme (prix non adéquat)</option>
+                                        <option value="Non réception facture">Non réception facture</option>
+                                    </select>
+                                </div>
+                            </div>
 
-                                                                <div className="col-lg-9 col-md-9">
-                                                                    <div className="text-left">
-                                                                    
-                                                                        <input type="file" value={formData.Image} name="picture" onChange={handleImage} />          
+                            <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Image</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        name="picture"
+                                        onChange={handleImage}
+                                    />
+                                </div>
+                            </div>
 
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                            <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Numéro GSM</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        name="gsm"
+                                        id="gsm"
+                                        required
+                                        value={formData.gsm}
+                                        onChange={(e) => setFormData({ ...formData, gsm: e.target.value })}
+                                    />
+                                </div>
+                            </div>
 
-                                                    </div>
-                                                </div>
-                                            
-
------------------------------------------------------
-                                        <div className="row mt-3">
-                                            <div className="col-lg-3 col-md-3">Numero GSM</div>
-                                            <div className="col-lg-9 col-md-9">
-                                                <div className="text-right">
-                                                    <input type="text" className="form-control" name="gsm" id="gsm" value={formData.gsm} required="" aria-required="true" onChange={(e) => setFormData({ ...formData, gsm: e.target.value })} />
-                                                </div>
-                                            </div>
-                                        </div>
- -------------------------------------- --------------------------------------
-                                        <div className="mb-3 row">
-                                        <label htmlFor="Message" className="col-sm-3 col-form-label">Message</label>
-                                        <div className="col-sm-9">
-                                          <textarea
-                                            id="Message"
-                                            name="Message"
-                                            className="form-control"
-                                            rows="5"
-                                            placeholder="Type something..."
-                                            value={formData.Message}
-                                            onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
-                                          />
-                                        </div>
-                                      </div>
-                                    </div>
+                            <div className="mb-3 row">
+                                <label htmlFor="Message" className="col-lg-3 col-md-3 col-form-label">Message</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <textarea
+                                        id="Message"
+                                        name="Message"
+                                        className="form-control"
+                                        rows="5"
+                                        placeholder="Type something..."
+                                        value={formData.Message}
+                                        onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
+                                    />
                                 </div>
                             </div>
                         </div>
-
-                        
-
-                          
-
-                        
-                        
+                        <div className="card-footer text-right">
+                            <button type="submit" className="btn btn-primary">Envoyer</button>
+                        </div>
                     </div>
-
-                    <div className='col-sm-4 mt-5 text-right'>
-                        <button type="submit" >Envoyer</button>
-                    </div>
-                    </>
-            )}
-
-        </form>
-
-
-
-
-
+                </div>
+            </form>
+        </div>
     );
 }

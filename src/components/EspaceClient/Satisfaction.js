@@ -21,11 +21,12 @@ export default function Satisfaction() {
         code_Client: '',
         type_Client: '',
         id: '',
-        Sugg_context:'',
-        Subject:'',
-        Message:'',
-        Ticket:'',
-        client_id:'',
+        question1: '',
+        question2: '',
+        question3: '',
+        question4: '',
+        question5: '',
+        client_id: '',
     });
     const [token, setToken] = useState('');
 
@@ -36,7 +37,8 @@ export default function Satisfaction() {
         axios.get('api/currentuser')
             .then(res => {
                 if (res.data.status === 200) {
-                    setFormData({
+                    setFormData(prevFormData => ({
+                        ...prevFormData,
                         name: res.data.currentuser.name,
                         lastName: res.data.currentuser.last_name,
                         rue: res.data.currentuser.rue,
@@ -53,8 +55,7 @@ export default function Satisfaction() {
                         code_Client: res.data.currentuser.code_Client,
                         type_Client: res.data.currentuser.type_Client,
                         id: res.data.currentuser._id,
-                        
-                    });
+                    }));
                     setLoading(false);
                 } else if (res.data.status === 404) {
                     swal("", res.data.message, "error");
@@ -65,6 +66,14 @@ export default function Satisfaction() {
             });
     }, []);
 
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevFormData => ({
+            ...prevFormData,
+            [name]: value
+        }));
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -74,7 +83,7 @@ export default function Satisfaction() {
                 formDataToSend.append(key, value);
             });
 
-            const response = await axios.post(`api/Submitsuggestion/${formData.id}`, formDataToSend, {
+            const response = await axios.post(`api/SubmitSS/${formData.id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     'X-CSRF-TOKEN': token,
@@ -84,13 +93,15 @@ export default function Satisfaction() {
 
             if (response.status === 201) {
                 swal("", response.data.message, "success");
-                // Reset formData state
-                setFormData({
-                    Sugg_context:'',
-                    Subject:'',
-                    Message:'',
-                    
-                });
+
+                setFormData(prevFormData => ({
+                    ...prevFormData,
+                    question1: '',
+                    question2: '',
+                    question3: '',
+                    question4: '',
+                    question5: '',
+                }));
             }
         } catch (error) {
             console.error('Error:', error);
@@ -102,71 +113,114 @@ export default function Satisfaction() {
     }
 
     return (
-        <form className="row justify-content-center" onSubmit={handleSubmit}>
-            <div className="col-md-12">
+        <div className="container">
+            <form onSubmit={handleSubmit}>
                 <div className="card mt-5">
                     <div className="card-body">
-                        <div className="ibox float-e-margins">
-                            <div className="ibox-title mb-5">
-                                <strong>Informations du compte</strong>
-                            </div>
-                            <div className="ibox-content no-padding">
-                                <div className="row">
-                                    <div className="col-lg-3 col-md-3">Contexte de suggestion *</div>
-                                    <div className="col-lg-9 col-md-9">
-                                        <div className="text-left">
-                                            <select
-                                                name="Sugg_context"
-                                                className="form-control"
-                                                required
-                                                value={formData.Sugg_context}
-                                                onChange={(e) => setFormData({ ...formData, Sugg_context: e.target.value })}
-                                            >
-                                                <option value="0"  selected>Sélectionnez une categorie</option>
-                                                <option value="Commerciale">Commerciale</option>
-                                                <option value="Technique">Technique</option>
-                                            </select>
-                                        </div>
-                                    </div>
+                        <h5 className="card-title mb-4">Liste des Enquête de satisfaction</h5>
+                        <div className="form-group row">
+                            <div className="col-sm-12">
+                                <label className="col-form-label">Quel est votre degré de satisfaction par rapport à la qualité de service TOPNET :</label>
+                                <div className="form-check">
+                                    <input type="radio" name="question1" value="1" checked={formData.question1 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Tout à fait satisfait</label>
                                 </div>
-                                <div className="row mt-3">
-                                    <div className="col-lg-3 col-md-3">Sujet *</div>
-                                    <div className="col-lg-9 col-md-9">
-                                        <div className="text-right">
-                                            <input
-                                                type="text"
-                                                className="form-control"
-                                                name="Subject"
-                                                id="Subject"
-                                                required
-                                                value={formData.Subject}
-                                                onChange={(e) => setFormData({ ...formData, Subject: e.target.value })}
-                                            />
-                                        </div>
-                                    </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question1" value="2" checked={formData.question1 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Satisfait</label>
                                 </div>
-                                <div className="mb-3 row">
-                                    <label htmlFor="Message" className="col-sm-3 col-form-label">Message *</label>
-                                    <div className="col-sm-9">
-                                        <textarea
-                                            id="Message"
-                                            name="Message"
-                                            className="form-control"
-                                            rows="5"
-                                            required
-                                            value={formData.Message}
-                                            onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
-                                        />
-                                    </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question1" value="3" checked={formData.question1 === '3'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Peu satisfait</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question1" value="4" checked={formData.question1 === '4'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Pas du tout satisfait</label>
                                 </div>
                             </div>
                         </div>
+                        
+                        <div className="form-group row">
+                            <div className="col-sm-12">
+                                <label className="col-form-label">Quel est votre degré de satisfaction par rapport à notre application mobile :</label>
+                                <div className="form-check">
+                                    <input type="radio" name="question2" value="1" checked={formData.question2 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Tout à fait satisfait</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question2" value="2" checked={formData.question2 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Satisfait</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question2" value="3" checked={formData.question2 === '3'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Peu satisfait</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question2" value="4" checked={formData.question2 === '4'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Pas du tout satisfait</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <div className="col-sm-12">
+                                <label className="col-form-label">Quel est votre degré de satisfaction par rapport à notre site web :</label>
+                                <div className="form-check">
+                                    <input type="radio" name="question3" value="1" checked={formData.question3 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Tout à fait satisfait</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question3" value="2" checked={formData.question3 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Satisfait</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question3" value="3" checked={formData.question3 === '3'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Peu satisfait</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question3" value="4" checked={formData.question3 === '4'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Pas du tout satisfait</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <div className="col-sm-12">
+                                <label className="col-form-label">Comptez-vous renouveler votre contrat ?</label>
+                                <div className="form-check">
+                                    <input type="radio" name="question4" value="1" checked={formData.question4 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Oui</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question4" value="2" checked={formData.question4 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Non</label>
+                                </div>
+                                
+                            </div>
+                        </div>
+                        <div className="form-group row">
+                            <div className="col-sm-12">
+                                <label className="col-form-label">Recommanderiez-vous Topnet à vos proches ?</label>
+                                <div className="form-check">
+                                    <input type="radio" name="question5" value="1" checked={formData.question5 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Oui</label>
+                                </div>
+                                <div className="form-check">
+                                    <input type="radio" name="question5" value="2" checked={formData.question5 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <label className="form-check-label">Non</label>
+                                </div>
+                                
+                                
+                            </div>
+                        </div>
+                        
+                        
                     </div>
                 </div>
-            </div>
-            <div className="col-sm-4 mt-5 text-right">
-                <button type="submit">Modifier</button>
-            </div>
-        </form>
+                <div className="form-group row mt-3">
+                    <div className="col-sm-12 text-right">
+                        <button type="submit" className="btn btn-primary">Modifier</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     );
 }

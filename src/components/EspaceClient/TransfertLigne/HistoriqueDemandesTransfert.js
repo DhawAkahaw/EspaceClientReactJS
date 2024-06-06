@@ -22,6 +22,16 @@ export default function Line() {
                 console.error('Error fetching current user:', error);
             });
     }, []);
+
+
+    const formatDate = (dateString) => {
+        const date = new Date(dateString);
+        const year = date.getFullYear().toString().slice(-2);
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    };
+
     
     return (
         <div className="align-items-center justify-content-between mb-4">
@@ -34,23 +44,23 @@ export default function Line() {
                     },
                     {
                         title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Ancien numéro de téléphone</h6>,
-                        render: rowData => <p>{rowData.gsm}</p>
+                        render: rowData => <p>{rowData.prev_num}</p>
                     },
                     {
                         title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Nouveau numéro de téléphone</h6>,
                         render: rowData => <p>{rowData.new_num_tel}</p>
                     }, {
                         title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Date de création	</h6>,
-                        render: rowData => <p>{rowData.created_at}</p>
+                        render: rowData => <p>{formatDate(rowData.created_at)}</p>
                     },
                     {
-                      title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Date de création</h6>,
-                      render: rowData => <p>{rowData.created_at}</p>
-                  },
-                 
-                    {
                         title: <h6 style={{ fontSize: '17px', color: '#f48404' }}>Etat</h6>,
-                        render: rowData => <p>{rowData.gsm}</p>
+                        render: rowData => (
+                            <div style={{ display: 'flex', alignItems: 'center' }}>
+                                <div style={{ width: 8, height: 8, borderRadius: '50%', backgroundColor: 'green', marginRight: 8 }}></div>
+                                <span style={{ color: 'green', textShadow: '0px 0px 10px green' }}>{rowData.State}</span>
+                            </div>
+                        )
                     },
                    
                     {
@@ -60,7 +70,7 @@ export default function Line() {
                    
                 ]}
                 data={line}
-                title={<h4>Mes line</h4>}
+                title={<h4>Historique des demandes de transfert de ligne</h4>}
                 icons={tableIcons} // Use the imported tableIcons
                 options={{
                     padding: 'dense',

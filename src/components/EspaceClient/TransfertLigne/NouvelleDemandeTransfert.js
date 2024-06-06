@@ -33,6 +33,8 @@ export default function Line() {
         Ticket:'',
         State:'',
         client_id:'',
+        CIN:'',
+        NOM:''
         
     });
     const [formSave, setFormSave] = useState({
@@ -50,7 +52,7 @@ export default function Line() {
 
     
     const [token, setToken] = useState('');
-
+    const [sameAddress, setSameAddress] = useState(false);
 
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
@@ -133,6 +135,32 @@ export default function Line() {
                 setFormData({
                     name: '',
                     lastName: '',
+                    
+                    rue: '',
+                    gouvernorat: '',
+                    delegation: '',
+                    localite: '',
+                    ville: '',
+                    code_postal: '',
+                    gsm: '',
+                    login: '',
+                    password: '',
+                    code_Client: '',
+                    type_Client: '',
+                    id: '',
+                    adsl_num:'',
+                    new_num_tel:'',
+                    prev_num:'',
+                    Remarque:'',
+                    Ticket:'',
+                    State:'',
+                    CIN:'',
+                    NOM:''
+
+                });
+                setFormSave({
+                    name: '',
+                    lastName: '',
                     tel: '',
                     rue: '',
                     gouvernorat: '',
@@ -152,9 +180,9 @@ export default function Line() {
                     Remarque:'',
                     Ticket:'',
                     State:'',
-                    
-                    
+
                 });
+                
             }
         } catch (error) {
             console.error('Error:', error);
@@ -162,7 +190,10 @@ export default function Line() {
     };
 
     // Function to get cities by governorate
-  
+    const [showInput, setShowInput] = useState(false);
+    const handleRadioChange = (e) => {
+        setShowInput(e.target.value === "Non");
+    };
 
 
     function getCitiesByGovernorate(data) {
@@ -190,27 +221,26 @@ export default function Line() {
     return (
 
 
-
+<div className="container mt-5">
         <form className="row justify-content-center" onSubmit={handleSubmit}>
             {loading ? (
                 <Loading />
                 ) : (
                 <>
-                    <div className="col-md-12">
-                       
+                    <div className="col-md-12">                    
                         <div className="card mt-5">
                             <div className="card-body">
-                                <div className="ibox float-e-margins">
-                                    <div className="ibox-title mb-5">
-                                        <strong>Informations du compte</strong>
+                                <div className="card shadow-sm">
+                                    <div className="card-header text-center">
+                                        <strong>Ajouter une nouvelle demande de transfert de ligne</strong>
                                     </div>
- -----------------------------------------------------------------------------------------
-                                    <div className="ibox-content no-padding">
-                                        <div className="row">
-                                            <div className="col-sm-2 control-label">Numéro ADSL *</div>
+
+                                    <div className="card-body">
+                                        <div className="mb-3 row">
+                                            <div className="col-lg-3 col-md-3 col-form-label">Numéro ADSL *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                <select name="offre" className="form-control" required="" aria-required="true"value={formData.adsl_num} onChange={(e) => setFormData({ ...formData, adsl_num: e.target.value })} >
+                                                <select name="offre" className="form-control" required="" aria-required="true" value={formData.adsl_num} onChange={(e) => setFormData({ ...formData, adsl_num: e.target.value })} >
                                                         <option value='0'>Choisir le numero</option>
                                                         <option value={formData.tel}>{formData.tel}</option>
                                                       
@@ -218,11 +248,11 @@ export default function Line() {
                                                 </div>
                                             </div>
                                           </div>
-                                          -------------------------------------------------
+                                         
                                           <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Nouveau numéro de téléphone * </div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Nouveau numéro de téléphone * </div>
                                             <div className="col-lg-9 col-md-9">
-                                                <div className="text-left">
+                                                <div className="text-right">
                                                 <input
                                                         type="text"
                                                         className="form-control"
@@ -236,50 +266,92 @@ export default function Line() {
                                                 </div>
                                             </div>
                                         </div>
-----------------------------------------------------------
+                    
                                             <div className="row mt-3">
-                                            <div className="col-sm-2 control-label"> </div>
+                                            
+                                            <div className="col-lg-3 col-md-3 col-form-label">Vous êtes propriétaire de la ligne * </div>
                                             <div className="col-lg-9 col-md-9">
+                                                
                                                 <div className="text-left">
-                                                <input type="radio" value="Oui" name="gender" /> Oui
-                                                <input type="radio" value="Non" name="gender" /> Non
+                                                    
+                                                <input type="radio" value="Oui" name="prop" onChange={handleRadioChange} /> Oui
+                                                <input type="radio" value="Non" name="prop" onChange={handleRadioChange} /> Non
                                                 </div>
                                             </div>
                                         </div>
-------------------------------------------------------------
-                                              <div className="row">
-                                            <div className="col-sm-2 control-label">CIN</div>
-                                            <div className="col-lg-9 col-md-9">
-                                                <div className="text-left">
-                                                <input type="file" name="picture" onChange={handleImage} />  
-                                                </div>
-                                            </div>
-                                          </div>
-------------------------------------------------------------------
+
+
+
+
+                                        {showInput && (
+                    <div className="row mt-3">
+                        <div className="col-lg-3 col-md-3 col-form-label">Nom du propriaitaire *</div>
+                        <div className="col-lg-9 col-md-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="Nom"
+                                value={formData.NOM}
+                                onChange={(e) => setFormData({ ...formData, NOM: e.target.value })}
+                            />
+                            
+                        </div>
+                        <div className="col-lg-3 col-md-3 col-form-label">CIN du propriaitaire *</div>
+                        <div className="col-lg-9 col-md-9">
+                            <input
+                                type="text"
+                                className="form-control"
+                                name="CIN"
+                                value={formData.CIN}
+                                onChange={(e) => setFormData({ ...formData, CIN: e.target.value })}
+                            />
+                            
+                        </div>
+                    </div>
+                    
+                )}
+
+                                              <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Image</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        name="picture"
+                                        onChange={handleImage}
+                                    />
+                                </div>
+
+
+
+
+                            </div>
+
 
                                             <div className="row mt-3">
-                                            <div className="col-sm-2 control-label"> </div>
+                                            <div className="col-lg-3 col-md-3 col-form-label"> </div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-left">
-                                                <input type="checkbox" value="quest" name="quest" /> Voulez vous garder la même adresse?
+                                                <input type="checkbox" value="quest" name="quest" onChange={(e) => setSameAddress(e.target.checked)}/> Voulez vous garder la même adresse?
                                                 
                                                 </div>
                                             </div>
                                         </div>
-------------------------- --------------------------------
 
-<div className="card mt-5">
+
+                            <div className="card mt-5">
                             <div className="card-body">
                                 <div className="ibox float-e-margins">
                                     <div className="ibox-title mb-5">
                                         <strong>Adresse actuelle</strong>
                                     </div>
-                                    <div className="ibox-content no-padding">
+                                    <div className="card-body">
                                         <div className="row">
-                                            <div className="col-sm-2 control-label">Rue *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Rue *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
                                                     <input
+                                                    readOnly
                                                         type="text"
                                                         className="form-control"
                                                         name="rue"
@@ -294,10 +366,10 @@ export default function Line() {
                                         </div>
 
                                         <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Gouvernorat *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Gouvernorat *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <select name="gouvernorat" className="form-control" required="" aria-required="true" value={formSave.gouvernorat} >
+                                                    <select name="gouvernorat" readOnly className="form-control" required="" aria-required="true" value={formSave.gouvernorat} >
                                                         <option value=""  selected>{formSave.gouvernorat}</option>
                                                         
                                                     </select>
@@ -306,7 +378,7 @@ export default function Line() {
                                         </div>
 
                                         <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Délégation *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Délégation *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
                                                     <select
@@ -315,6 +387,7 @@ export default function Line() {
                                                         required=""
                                                         aria-required="true"
                                                         value={formSave.delegation}
+                                                        readOnly
                                                     >
                                                         <option value="" selected>{formSave.delegation}</option>
                                                         
@@ -324,19 +397,19 @@ export default function Line() {
                                         </div>
 
                                         <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Ville *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Ville *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="ville" id="ville" value={formSave.ville} required="" aria-required="true"  />
+                                                    <input type="text" className="form-control" name="ville" id="ville" value={formSave.ville} required="" aria-required="true" readOnly />
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Code postal *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Code postal *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="code_postal" id="code_postal" value={formSave.code_postal} required="" aria-required="true"  />
+                                                    <input type="text" className="form-control" name="code_postal" id="code_postal" value={formSave.code_postal} required="" aria-required="true" readOnly />
                                                 </div>
                                             </div>
                                         </div>
@@ -344,16 +417,16 @@ export default function Line() {
                                 </div>
                             </div>
                         </div>
-------------------------------------------------------------
+
                           <div className="card mt-5">
                             <div className="card-body">
                                 <div className="ibox float-e-margins">
                                     <div className="ibox-title mb-5">
                                         <strong>Nouvelle adresse</strong>
                                     </div>
-                                    <div className="ibox-content no-padding">
+                                    <div className="card-body">
                                         <div className="row">
-                                            <div className="col-sm-2 control-label">Rue *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Rue *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
                                                     <input
@@ -365,16 +438,17 @@ export default function Line() {
                                                         required=""
                                                         aria-required="true"
                                                         onChange={(e) => setFormData({ ...formData, rue: e.target.value })}
+                                                        disabled={sameAddress}
                                                     />
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Gouvernorat *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Gouvernorat *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <select name="gouvernorat" value={formData.gouvernorat}className="form-control" required="" aria-required="true"  onChange={(e) => setFormData({ ...formData, gouvernorat: e.target.value })}>
+                                                    <select name="gouvernorat" disabled={sameAddress} value={formData.gouvernorat}className="form-control" required="" aria-required="true"  onChange={(e) => setFormData({ ...formData, gouvernorat: e.target.value })}>
                                                         <option value=""  selected>Sélectionnez un gouvernorat</option>
                                                         {Object.keys(citiesByGovernorate).map((gov, index) => (
                                                             <option key={index} value={gov}>{gov}</option>
@@ -385,7 +459,7 @@ export default function Line() {
                                         </div>
 
                                         <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Délégation *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Délégation *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
                                                     <select
@@ -395,6 +469,7 @@ export default function Line() {
                                                         aria-required="true"
                                                         value={formData.delegation}
                                                         onChange={(e) => setFormData({ ...formData, delegation: e.target.value })}
+                                                        disabled={sameAddress}
                                                     >
                                                         <option value="" selected>Sélectionnez une délégation</option>
                                                         {formData.gouvernorat && citiesByGovernorate[formData.gouvernorat] && citiesByGovernorate[formData.gouvernorat].map((deleg, index) => (
@@ -406,19 +481,19 @@ export default function Line() {
                                         </div>
 
                                         <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Ville *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Ville *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="ville" id="ville"  required="" aria-required="true" value={formData.ville}onChange={(e) => setFormData({ ...formData, ville: e.target.value })} />
+                                                    <input type="text"  disabled={sameAddress} className="form-control" name="ville" id="ville"  required="" aria-required="true" value={formData.ville}onChange={(e) => setFormData({ ...formData, ville: e.target.value })} />
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="row mt-3">
-                                            <div className="col-sm-2 control-label">Code postal *</div>
+                                            <div className="col-lg-3 col-md-3 col-form-label">Code postal *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="code_postal" id="code_postal"  required="" aria-required="true" value={formData.code_postal}onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })} />
+                                                    <input type="text"  className="form-control" name="code_postal" id="code_postal"  required="" aria-required="true" value={formData.code_postal} onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })}disabled={sameAddress} />
                                                 </div>
                                             </div>
                                         </div>
@@ -426,19 +501,12 @@ export default function Line() {
                                 </div>
                             </div>
                         </div>
- -------------------------------------- --------------------------------------
+ 
                                         
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        
-
-                          
-
-                        
-                        
                     </div>
 
                     <div className='col-sm-4 mt-5 text-right'>
@@ -449,7 +517,7 @@ export default function Line() {
 
         </form>
 
-
+</div>
 
 
 

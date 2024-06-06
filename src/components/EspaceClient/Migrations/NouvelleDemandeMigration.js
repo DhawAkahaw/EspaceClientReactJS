@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Loading from './Loading';
- import axios from "axios";
+import axios from 'axios';
 import swal from 'sweetalert';
 
 export default function Migration() {
@@ -52,7 +52,6 @@ export default function Migration() {
                         gsm: res.data.currentuser.gsm,
                         login: res.data.currentuser.login,
                         password: res.data.currentuser.password,
-                        picture: res.data.currentuser.picture,
                         code_Client: res.data.currentuser.code_Client,
                         type_Client: res.data.currentuser.type_Client,
                         id: res.data.currentuser._id,
@@ -60,7 +59,7 @@ export default function Migration() {
                     setToken(token);
                     setLoading(false);
                 } else if (res.data.status === 404) {
-                    swal("", res.data.message, "error" ,);
+                    swal("", res.data.message, "error");
                 }
             })
             .catch(error => {
@@ -70,13 +69,12 @@ export default function Migration() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
         try {
             const formDataToSend = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
                 formDataToSend.append(key, value);
             });
-            formDataToSend.append('picture', formData.picture);
 
             const response = await axios.post(`api/Submitmigration/${formData.id}`, formDataToSend, {
                 headers: {
@@ -84,15 +82,15 @@ export default function Migration() {
                     'X-CSRF-TOKEN': token,
                     'Authorization': `Bearer ${token}`
                 }
-                
             });
 
             if (response.status === 201) {
                 swal("", response.data.message, "success");
                 setFormData({
-                    desired_offre:"",
-                    current_offre:'',
-                    Contract:'',
+                    ...formData,
+                    desired_offre: "",
+                    current_offre: '',
+                    Contract: '',
                 });
             }
         } catch (error) {
@@ -105,86 +103,73 @@ export default function Migration() {
     }
 
     return (
-        <form className="row justify-content-center" onSubmit={handleSubmit}>
-            <div className="col-md-12">
-                <div className="card mt-5">
-                    <div className="card-body">
-                        <div className="ibox float-e-margins">
-                            <div className="ibox-title mb-5">
-                                <strong>Informations du compte</strong>
-                            </div>
-                            <div className="ibox-content no-padding">
-                                <div className="row">
-                                    <div className="col-lg-3 col-md-3">Contract *</div>
-                                    <div className="col-lg-9 col-md-9">
-                                        <div className="text-right">
-                                            <select
-                                                name="Contract"
-                                                className="form-control"
-                                                required
-                                                aria-required="true"
-                                                onChange={(e) => setFormData({ ...formData, Contract: e.target.value })}
-                                                value={formData.Contract}
-                                            >
-                                                <option value='0'>Choisir l'Offre</option>
-                                                <option value={formData.tel}>{formData.tel}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="row mt-3">
-                                    <div className="col-lg-3 col-md-3">Offre actuelle *</div>
-                                    <div className="col-lg-9 col-md-9">
-                                        <div className="text-right">
-                                            <select
-                                                name="current_offre"
-                                                className="form-control"
-                                                required
-                                                aria-required="true"
-                                                onChange={(e) => setFormData({ ...formData, current_offre: e.target.value })}
-                                                value={formData.current_offre}
-                                            >
-                                                <option value=''>Choisir le Service</option>
-                                                <option value={formData.tel}>{formData.tel}</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="row mt-3">
-                                    <div className="col-lg-3 col-md-3">Offre cible *</div>
-                                    <div className="col-lg-9 col-md-9">
-                                        <div className="text-right">
-                                            <select
-                                                name="desired_offre"
-                                                className="form-control"
-                                                required
-                                                aria-required="true"
-                                                value={formData.desired_offre}
-                                                onChange={(e) => setFormData({ ...formData, desired_offre: e.target.value })}
-                                            >
-                                                <option value=''>Choisir le Service</option>
-                                                <option value='Fidélité SMART RAPIDO 100M (sans voix)'>Fidélité SMART RAPIDO 100M (sans voix)</option>
-                                                <option value='Fidélité SMART RAPIDO 20M (Sans Voix)'>Fidélité SMART RAPIDO 20M (Sans Voix)</option>
-                                                <option value='Fidélité SMART RAPIDO 30M (sans voix)'>Fidélité SMART RAPIDO 30M (sans voix)</option>
-                                                <option value='PROMO SMART ADSL 10M'>PROMO SMART ADSL 10M</option>
-                                                <option value='PROMO SMART ADSL 12M'>PROMO SMART ADSL 12M</option>
-                                                <option value='PROMO SMART ADSL 20M'>PROMO SMART ADSL 20M</option>
-                                                <option value='PROMO SMART RAPIDO 20M (Sans Voix)'>PROMO SMART RAPIDO 20M (Sans Voix)</option>
-                                                <option value='PROMO SMART RAPIDO 30M (Sans Voix)'>PROMO SMART RAPIDO 30M (Sans Voix)</option>
-                                                <option value='SMART ADSL 10M'>SMART ADSL 10M</option>
-                                                <option value='SMART ADSL 12M'>SMART ADSL 12M</option>
-                                                <option value='SMART ADSL 20M'>SMART ADSL 20M</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+        <form className="container mt-5" onSubmit={handleSubmit}>
+            <div className="card shadow-sm">
+                <div className="card-header text-center">
+                    <h4>Ajouter une nouvelle demande de migration de l'offre</h4>
+                </div>
+                <div className="card-body">
+                    <div className="mb-3 row">
+                        <label className="col-lg-3 col-md-3 col-form-label">Contract *</label>
+                        <div className="col-lg-9 col-md-9">
+                            <select 
+                                name="Contract" 
+                                className="form-control" 
+                                required 
+                                value={formData.Contract} 
+                                onChange={(e) => setFormData({ ...formData, Contract: e.target.value })}
+                            >
+                                <option value='0'>Choisir l'Offre</option>
+                                <option value={formData.tel}>{formData.tel}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="mb-3 row">
+                        <label className="col-lg-3 col-md-3 col-form-label">Offre actuelle *</label>
+                        <div className="col-lg-9 col-md-9">
+                            <select 
+                                name="current_offre" 
+                                className="form-control" 
+                                required 
+                                value={formData.current_offre} 
+                                onChange={(e) => setFormData({ ...formData, current_offre: e.target.value })}
+                            >
+                                <option value=''>Choisir le Service</option>
+                                <option value={formData.tel}>{formData.tel}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div className="mb-3 row">
+                        <label className="col-lg-3 col-md-3 col-form-label">Offre cible *</label>
+                        <div className="col-lg-9 col-md-9">
+                            <select 
+                                name="desired_offre" 
+                                className="form-control" 
+                                required 
+                                value={formData.desired_offre} 
+                                onChange={(e) => setFormData({ ...formData, desired_offre: e.target.value })}
+                            >
+                                <option value=''>Choisir le Service</option>
+                                <option value='Fidélité SMART RAPIDO 100M (sans voix)'>Fidélité SMART RAPIDO 100M (sans voix)</option>
+                                <option value='Fidélité SMART RAPIDO 20M (Sans Voix)'>Fidélité SMART RAPIDO 20M (Sans Voix)</option>
+                                <option value='Fidélité SMART RAPIDO 30M (sans voix)'>Fidélité SMART RAPIDO 30M (sans voix)</option>
+                                <option value='PROMO SMART ADSL 10M'>PROMO SMART ADSL 10M</option>
+                                <option value='PROMO SMART ADSL 12M'>PROMO SMART ADSL 12M</option>
+                                <option value='PROMO SMART ADSL 20M'>PROMO SMART ADSL 20M</option>
+                                <option value='PROMO SMART RAPIDO 20M (Sans Voix)'>PROMO SMART RAPIDO 20M (Sans Voix)</option>
+                                <option value='PROMO SMART RAPIDO 30M (Sans Voix)'>PROMO SMART RAPIDO 30M (Sans Voix)</option>
+                                <option value='SMART ADSL 10M'>SMART ADSL 10M</option>
+                                <option value='SMART ADSL 12M'>SMART ADSL 12M</option>
+                                <option value='SMART ADSL 20M'>SMART ADSL 20M</option>
+                            </select>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className='col-sm-4 mt-5 text-right'>
-                <button type="submit">Envoyer</button>
+                <div className="card-footer text-right">
+                    <button type="submit" className="btn btn-primary">Envoyer</button>
+                </div>
             </div>
         </form>
     );
