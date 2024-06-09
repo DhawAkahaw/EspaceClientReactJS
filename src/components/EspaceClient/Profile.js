@@ -331,16 +331,21 @@ export default function Profile() {
                                     <div className="ibox-title mb-5">
                                         <strong>Photo de profil</strong>
                                     </div>
-                                    <div className="ibox-content no-padding">
-                                        <div className="row">
+                                    <div className="mb-3 row">
+                                <label className="col-lg-3 col-md-3 col-form-label">Image</label>
+                                <div className="col-lg-9 col-md-9">
+                                    <input
+                                        type="file"
+                                        className="form-control"
+                                        name="picture"
+                                        onChange={handleImage}
+                                    />
+                                </div>
 
-                                            <div className="col-lg-9 col-md-9">
-                                                <div className="text-right">
 
-                                                    <input type="file" name="picture" onChange={handleImage} />                                        </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
+
+                            </div>
 
                                 </div>
                             </div>

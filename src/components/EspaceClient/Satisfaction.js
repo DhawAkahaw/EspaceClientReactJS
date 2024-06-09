@@ -122,19 +122,19 @@ export default function Satisfaction() {
                             <div className="col-sm-12">
                                 <label className="col-form-label">Quel est votre degré de satisfaction par rapport à la qualité de service TOPNET :</label>
                                 <div className="form-check">
-                                    <input type="radio" name="question1" value="1" checked={formData.question1 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question1" value="Tout à fait satisfait" checked={formData.question1 === 'Tout à fait satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Tout à fait satisfait</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question1" value="2" checked={formData.question1 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question1" value="Satisfait" checked={formData.question1 === 'Satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Satisfait</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question1" value="3" checked={formData.question1 === '3'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question1" value="Peu satisfait" checked={formData.question1 === 'Peu satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Peu satisfait</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question1" value="4" checked={formData.question1 === '4'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question1" value="Pas du tout satisfait" checked={formData.question1 === 'Pas du tout satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Pas du tout satisfait</label>
                                 </div>
                             </div>
@@ -144,15 +144,15 @@ export default function Satisfaction() {
                             <div className="col-sm-12">
                                 <label className="col-form-label">Quel est votre degré de satisfaction par rapport à notre application mobile :</label>
                                 <div className="form-check">
-                                    <input type="radio" name="question2" value="1" checked={formData.question2 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question2" value="Tout à fait satisfait" checked={formData.question2 === 'Tout à fait satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Tout à fait satisfait</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question2" value="2" checked={formData.question2 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question2" value="Satisfait" checked={formData.question2 === 'Satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Satisfait</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question2" value="3" checked={formData.question2 === '3'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question2" value="Peu satisfait" checked={formData.question2 === 'Peu satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Peu satisfait</label>
                                 </div>
                                 <div className="form-check">
@@ -165,19 +165,19 @@ export default function Satisfaction() {
                             <div className="col-sm-12">
                                 <label className="col-form-label">Quel est votre degré de satisfaction par rapport à notre site web :</label>
                                 <div className="form-check">
-                                    <input type="radio" name="question3" value="1" checked={formData.question3 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question3" value="Tout à fait satisfait" checked={formData.question3 === 'Tout à fait satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Tout à fait satisfait</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question3" value="2" checked={formData.question3 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question3" value="Satisfait" checked={formData.question3 === 'Satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Satisfait</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question3" value="3" checked={formData.question3 === '3'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question3" value="Peu satisfait" checked={formData.question3 === 'Peu satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Peu satisfait</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question3" value="4" checked={formData.question3 === '4'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question3" value="Pas du tout satisfait" checked={formData.question3 === 'Pas du tout satisfait'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Pas du tout satisfait</label>
                                 </div>
                             </div>
@@ -186,11 +186,11 @@ export default function Satisfaction() {
                             <div className="col-sm-12">
                                 <label className="col-form-label">Comptez-vous renouveler votre contrat ?</label>
                                 <div className="form-check">
-                                    <input type="radio" name="question4" value="1" checked={formData.question4 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question4" value="Oui" checked={formData.question4 === 'Oui'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Oui</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question4" value="2" checked={formData.question4 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question4" value="Non" checked={formData.question4 === 'Non'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Non</label>
                                 </div>
                                 
@@ -200,11 +200,11 @@ export default function Satisfaction() {
                             <div className="col-sm-12">
                                 <label className="col-form-label">Recommanderiez-vous Topnet à vos proches ?</label>
                                 <div className="form-check">
-                                    <input type="radio" name="question5" value="1" checked={formData.question5 === '1'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question5" value="Oui" checked={formData.question5 === 'Oui'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Oui</label>
                                 </div>
                                 <div className="form-check">
-                                    <input type="radio" name="question5" value="2" checked={formData.question5 === '2'} onChange={handleInputChange} className="form-check-input" />
+                                    <input type="radio" name="question5" value="Non" checked={formData.question5 === 'Non'} onChange={handleInputChange} className="form-check-input" />
                                     <label className="form-check-label">Non</label>
                                 </div>
                                 
@@ -217,7 +217,7 @@ export default function Satisfaction() {
                 </div>
                 <div className="form-group row mt-3">
                     <div className="col-sm-12 text-right">
-                        <button type="submit" className="btn btn-primary">Modifier</button>
+                        <button type="submit" className="btn btn-primary">Envoyer</button>
                     </div>
                 </div>
             </form>

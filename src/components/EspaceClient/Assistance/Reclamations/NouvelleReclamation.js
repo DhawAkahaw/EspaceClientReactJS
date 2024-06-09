@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Loading from './Loading';
 import axios from "axios";
 import swal from 'sweetalert';
@@ -25,13 +25,16 @@ export default function Reclamation() {
         Service:'',
         Category:'',
         Motif_rec:'',
-        Image:'',
+        Image:null,
         Message:'',
         Ticket:'',
         State:'',
         client_id:''
     });
     const [token, setToken] = useState('');
+
+    // Create a reference for the file input
+    const fileInputRef = useRef(null);
 
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
@@ -52,7 +55,7 @@ export default function Reclamation() {
                         gsm: res.data.currentuser.gsm,
                         login: res.data.currentuser.login,
                         password: res.data.currentuser.password,
-                        picture: res.data.currentuser.picture,
+                        Image: res.data.currentuser.Image,
                         code_Client: res.data.currentuser.code_Client,
                         type_Client: res.data.currentuser.type_Client,
                         id: res.data.currentuser._id
@@ -71,7 +74,7 @@ export default function Reclamation() {
     const handleImage = (e) => {
         setFormData(prevState => ({
             ...prevState,
-            picture: e.target.files[0]
+            Image: e.target.files[0]
         }));
     };
 
@@ -83,7 +86,7 @@ export default function Reclamation() {
             Object.entries(formData).forEach(([key, value]) => {
                 formDataToSend.append(key, value);
             });
-            formDataToSend.append('picture', formData.picture);
+            formDataToSend.append('Image', formData.Image);
             const response = await axios.post(`api/Submitreclamation/${formData.id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -99,9 +102,11 @@ export default function Reclamation() {
                     Service:'',
                     Category:'',
                     Motif_rec:'',
-                    Image:'',
+                    Image:null,
                     Message:'',
                 });
+                // Reset the file input field
+                fileInputRef.current.value = "";
             }
         } catch (error) {
             console.error('Error:', error);
@@ -194,8 +199,9 @@ export default function Reclamation() {
                                     <input
                                         type="file"
                                         className="form-control"
-                                        name="picture"
+                                        name="Image"
                                         onChange={handleImage}
+                                        ref={fileInputRef} // Add the ref here
                                     />
                                 </div>
                             </div>
