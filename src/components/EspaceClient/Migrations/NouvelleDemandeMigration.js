@@ -103,7 +103,7 @@ export default function Migration() {
     }
 
     return (
-        <form className="container mt-5" onSubmit={handleSubmit}>
+        <form style={{ maxWidth: '100%' }} onSubmit={handleSubmit}>
             <div className="card shadow-sm">
                 <div className="card-header text-center">
                     <h4>Ajouter une nouvelle demande de migration de l'offre</h4>
@@ -119,7 +119,7 @@ export default function Migration() {
                                 value={formData.Contract} 
                                 onChange={(e) => setFormData({ ...formData, Contract: e.target.value })}
                             >
-                                <option value='0'>Choisir l'Offre</option>
+                                <option value='0'>Choisir le contrat</option>
                                 <option value={formData.tel}>{formData.tel}</option>
                             </select>
                         </div>
@@ -151,7 +151,7 @@ export default function Migration() {
                                 value={formData.desired_offre} 
                                 onChange={(e) => setFormData({ ...formData, desired_offre: e.target.value })}
                             >
-                                <option value=''>Choisir le Service</option>
+                                <option value=''>Choisir l'offre</option>
                                 <option value='Fidélité SMART RAPIDO 100M (sans voix)'>Fidélité SMART RAPIDO 100M (sans voix)</option>
                                 <option value='Fidélité SMART RAPIDO 20M (Sans Voix)'>Fidélité SMART RAPIDO 20M (Sans Voix)</option>
                                 <option value='Fidélité SMART RAPIDO 30M (sans voix)'>Fidélité SMART RAPIDO 30M (sans voix)</option>
@@ -167,9 +167,13 @@ export default function Migration() {
                         </div>
                     </div>
                 </div>
-                <div className="card-footer text-right">
-                    <button type="submit" className="btn btn-primary">Envoyer</button>
-                </div>
+                <div className="card-footer">
+                        <div className="row justify-content-end">
+                            <div className="col-sm-1 text-right">
+                                <button type="submit" className="btn btn-primary btn-sm">Envoyer</button>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </form>
     );

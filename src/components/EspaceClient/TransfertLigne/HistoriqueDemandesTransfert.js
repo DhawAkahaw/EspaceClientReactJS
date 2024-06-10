@@ -32,7 +32,7 @@ export default function Line() {
         return `${year}-${month}-${day}`;
     };
 
-    
+
     return (
         <div className="align-items-center justify-content-between mb-4">
             <MaterialTable

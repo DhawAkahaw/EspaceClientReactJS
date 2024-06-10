@@ -24,7 +24,7 @@ export default function Migrations() {
     }, []);
     
 
-    const formatDate = (dateString) => {
+   const formatDate = (dateString) => {
         const date = new Date(dateString);
         const year = date.getFullYear().toString().slice(-2);
         const month = String(date.getMonth() + 1).padStart(2, '0');

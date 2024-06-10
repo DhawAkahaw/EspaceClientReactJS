@@ -25,8 +25,7 @@ import HistoriqueDemandesSuggestion from '../components/EspaceClient/Suggestion/
 //Satisfaction
 import Satisfaction from '../components/EspaceClient/Satisfaction';
 
-//Suivi Demandes
-import SuiviDemandes from '../components/EspaceClient/SuiviDemandes';
+
 
 const routes =  [
 
@@ -61,8 +60,7 @@ const routes =  [
     //Satisfaction route
     {path: '/espaceclient/satisfaction', exact:true, name:'Satisfaction', component:Satisfaction},
 
-    //Suivi Demandes
-    {path: '/espaceclient/suividemandes', exact:true, name:'SuiviDemandes', component:SuiviDemandes},
+   
 
 ]
 

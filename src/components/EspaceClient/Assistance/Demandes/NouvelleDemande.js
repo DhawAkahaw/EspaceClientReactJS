@@ -3,6 +3,7 @@ import Loading from './Loading';
 import axios from "axios";
 import swal from 'sweetalert';
 
+
 export default function Reclamation() {
     const [loading, setLoading] = useState(true);
     const [formData, setFormData] = useState({
@@ -32,7 +33,6 @@ export default function Reclamation() {
         client_id: '',
         Reference: '',
         Motif_demand: '',
-        Message: '',
         clientId: '',
     });
     const [token, setToken] = useState('');
@@ -109,7 +109,7 @@ export default function Reclamation() {
     }
 
     return (
-        <form className="container mt-5" onSubmit={handleSubmit}>
+        <form style={{ maxWidth: '100%' }} onSubmit={handleSubmit}>
             <div className="card shadow-sm">
                 <div className="card-header text-center">
                     <h4>Ajouter une nouvelle demande</h4>
@@ -168,9 +168,13 @@ export default function Reclamation() {
                         </div>
                     </div>
                 </div>
-                <div className="card-footer text-right">
-                    <button type="submit" className="btn btn-primary">Envoyer</button>
-                </div>
+                <div className="card-footer">
+                        <div className="row justify-content-end">
+                            <div className="col-sm-1 text-right">
+                                <button type="submit" className="btn btn-primary btn-sm">Envoyer</button>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </form>
     );

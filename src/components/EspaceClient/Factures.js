@@ -27,6 +27,7 @@ export default function Factures() {
             .catch(error => {
                 console.error('Error fetching current user:', error);
             });
+            
     }, []);
 
     const VoirPDF = (e, pdf) => {

@@ -4,6 +4,7 @@ import './Login.css';
 import axios from "axios";
 import swal from 'sweetalert';
 import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const LoginScreen = () => {
     const history = useHistory();
@@ -53,12 +54,12 @@ const LoginScreen = () => {
     }
 
     return (
-        <div className='login-screen-box'>
+        <div className='login-screen-box ' style={{height:500 }}>
             <img src="https://icons.veryicon.com/png/o/miscellaneous/two-color-icon-library/user-286.png" className="avatar" alt="User Avatar" />
             <h1>Connectez-vous</h1>
             <div>
                 <input
-                    placeholder='Tel'
+                    placeholder='Code client'
                     required
                     className="form-control"
                     onChange={handleInputLogin}
@@ -68,7 +69,7 @@ const LoginScreen = () => {
                 <span className="text-danger">{loginInput.error_list.tel}</span>
 
                 <input
-                    placeholder='Code client'
+                    placeholder='Mot de pass'
                     required
                     className="form-control"
                     onChange={handleInputLogin}
@@ -87,8 +88,14 @@ const LoginScreen = () => {
                     value={loginInput.captcha}
                     name="captcha"
                 />
-
+               
                 <button onClick={loginSubmit} type="submit">Se connecter</button>
+                <div className="card-footer text-center pt-0 px-lg-2 px-1 mt-3">
+                    <p className="mb-4 text-sm mx-auto">
+                        <Link to="/forgotpassword" className="text-info text-gradient font-weight-bold">Mot de passe oublié ?</Link>
+                    </p>
+                </div>
+                
             </div>
         </div>
     );

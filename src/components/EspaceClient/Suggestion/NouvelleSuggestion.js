@@ -99,66 +99,72 @@ export default function Suggestion() {
     }
 
     return (
-        <div className="container mt-5">
-            <form className="row justify-content-center" onSubmit={handleSubmit}>
-                <div className="col-md-12">
-                    <div className="card shadow-sm">
-                        <div className="card-header text-center">
-                            <h4>Ajouter une nouvelle suggestion</h4>
-                        </div>
-                        <div className="card-body">
-                            <div className="mb-3 row">
-                                <label className="col-lg-3 col-md-3 col-form-label">Contexte de suggestion *</label>
-                                <div className="col-lg-9 col-md-9">
-                                    <select
-                                        name="Sugg_context"
-                                        className="form-control"
-                                        required
-                                        value={formData.Sugg_context}
-                                        onChange={(e) => setFormData({ ...formData, Sugg_context: e.target.value })}
-                                    >
-                                        <option value="0" selected>Sélectionnez une catégorie</option>
-                                        <option value="Commerciale">Commerciale</option>
-                                        <option value="Technique">Technique</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div className="mb-3 row">
-                                <label className="col-lg-3 col-md-3 col-form-label">Sujet *</label>
-                                <div className="col-lg-9 col-md-9">
-                                    <input
-                                        type="text"
-                                        className="form-control"
-                                        name="Subject"
-                                        required
-                                        value={formData.Subject}
-                                        onChange={(e) => setFormData({ ...formData, Subject: e.target.value })}
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="mb-3 row">
-                                <label htmlFor="Message" className="col-lg-3 col-md-3 col-form-label">Message *</label>
-                                <div className="col-lg-9 col-md-9">
-                                    <textarea
-                                        id="Message"
-                                        name="Message"
-                                        className="form-control"
-                                        rows="5"
-                                        placeholder="Type something..."
-                                        value={formData.Message}
-                                        onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
-                                    />
-                                </div>
+        <div style={{ maxWidth: '100%' }}>
+        <form className="row justify-content-center" onSubmit={handleSubmit}>
+            <div className="col-md-12">
+                <div className="card shadow-sm">
+                    <div className="card-header text-center">
+                        <h4>Ajouter une nouvelle suggestion</h4>
+                    </div>
+                    <div className="card-body">
+                        <div className="mb-3 row">
+                            <label className="col-lg-3 col-md-3 col-form-label">Contexte de suggestion *</label>
+                            <div className="col-lg-9 col-md-9">
+                                <select
+                                    name="Sugg_context"
+                                    className="form-control"
+                                    required
+                                    value={formData.Sugg_context}
+                                    onChange={(e) => setFormData({ ...formData, Sugg_context: e.target.value })}
+                                >
+                                    <option value="0" selected>Sélectionnez une catégorie</option>
+                                    <option value="Commerciale">Commerciale</option>
+                                    <option value="Technique">Technique</option>
+                                </select>
                             </div>
                         </div>
-                        <div className="card-footer text-right">
-                            <button type="submit" className="btn btn-primary">Envoyer</button>
+    
+                        <div className="mb-3 row">
+                            <label className="col-lg-3 col-md-3 col-form-label">Sujet *</label>
+                            <div className="col-lg-9 col-md-9">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    name="Subject"
+                                    required
+                                    value={formData.Subject}
+                                    onChange={(e) => setFormData({ ...formData, Subject: e.target.value })}
+                                />
+                            </div>
+                        </div>
+    
+                        <div className="mb-3 row">
+                            <label htmlFor="Message" className="col-lg-3 col-md-3 col-form-label">Message *</label>
+                            <div className="col-lg-9 col-md-9">
+                                <textarea
+                                    id="Message"
+                                    name="Message"
+                                    className="form-control"
+                                    rows="5"
+                                    placeholder="Type something..."
+                                    value={formData.Message}
+                                    onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card-footer">
+                        <div className="row justify-content-end">
+                            <div className="col-sm-1 text-right">
+                                <button type="submit" className="btn btn-primary btn-sm">Envoyer</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
+    </div>
+    
+
     );
 }

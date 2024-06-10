@@ -1,18 +1,15 @@
-
 import React, { useState, useEffect } from 'react';
-
- import Loading from './/Loading';
- import axios from "axios";
+import { useHistory } from 'react-router-dom';
+import Loading from './/Loading';
+import axios from "axios";
 import swal from 'sweetalert';
 import { GovDeleg } from '../GovDeleg';
-
 
 export default function Line() {
     const [loading, setLoading] = useState(true);
 
     const [formData, setFormData] = useState({
-        name: '',
-        lastName: '',
+        
         tel: '',
         rue: '',
         gouvernorat: '',
@@ -21,10 +18,7 @@ export default function Line() {
         ville: '',
         code_postal: '',
         gsm: '',
-        login: '',
-        password: '',
-        code_Client: '',
-        type_Client: '',
+       
         id: '',
         adsl_num:'',
         new_num_tel:'',
@@ -35,24 +29,20 @@ export default function Line() {
         client_id:'',
         CIN:'',
         NOM:''
-        
     });
+
     const [formSave, setFormSave] = useState({
-        
-        
         rue: '',
         gouvernorat: '',
         delegation: '',
         localite: '',
         ville: '',
         code_postal: '',
-    
-        
     });
 
-    
     const [token, setToken] = useState('');
     const [sameAddress, setSameAddress] = useState(false);
+    const history = useHistory(); // 
 
     useEffect(() => {
         const token = localStorage.getItem('auth_token');
@@ -60,40 +50,29 @@ export default function Line() {
         axios.get('api/currentuser')
             .then(res => {
                 if (res.data.status === 200) {
-
                     setFormData(prevState => ({
                         ...prevState,
                         name: res.data.currentuser.name,
                         lastName: res.data.currentuser.last_name,
-                        rue: res.data.currentuser.rue,
-                        gouvernorat: res.data.currentuser.gouvernorat,
-                        delegation: res.data.currentuser.delegation,
-                        localite: res.data.currentuser.localite,
-                        ville: res.data.currentuser.ville,
-                        code_postal: res.data.currentuser.code_postal,
                         tel: res.data.currentuser.tel,
                         gsm: res.data.currentuser.gsm,
                         login: res.data.currentuser.login,
                         password: res.data.currentuser.password,
-                        picture: res.data.currentuser.picture,
-                        code_Client: res.data.currentuser.code_Client,
-                        type_Client: res.data.currentuser.type_Client,
+                     
+                      
                         id: res.data.currentuser._id
                     }));
                     setFormSave(prevState => ({
                         ...prevState,
-                       
                         rue: res.data.currentuser.rue,
                         gouvernorat: res.data.currentuser.gouvernorat,
                         delegation: res.data.currentuser.delegation,
                         localite: res.data.currentuser.localite,
                         ville: res.data.currentuser.ville,
                         code_postal: res.data.currentuser.code_postal,
-                        
                     }));
                     setToken(token);
                     setLoading(false);
-
                 } else if (res.data.status === 404) {
                     // If user not found, show an error message
                     swal("", res.data.message, "error");
@@ -104,24 +83,28 @@ export default function Line() {
             });
     }, []);
 
-    
     const handleImage = (e) => {
-      setFormData(prevState => ({
-          ...prevState,
-          picture: e.target.files[0]
-      }));
-  };
-      
+        setFormData(prevState => ({
+            ...prevState,
+            picture: e.target.files[0]
+        }));
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
         try {
             const formDataToSend = new FormData();
             Object.entries(formData).forEach(([key, value]) => {
                 formDataToSend.append(key, value);
             });
             formDataToSend.append('picture', formData.picture);
+
+            if (sameAddress) {
+                Object.entries(formSave).forEach(([key, value]) => {
+                    formDataToSend.append(key, value);
+                });
+            }
+
             const response = await axios.post(`api/Submitline/${formData.id}`, formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -131,88 +114,56 @@ export default function Line() {
             });
 
             if (response.status === 201) {
-                swal("", response.data.message, "success");
+                swal("", response.data.message, "success").then(() => {
+                    history.push('/');
+                });
                 setFormData({
-                    name: '',
-                    lastName: '',
-                    
+                   tel:'',
                     rue: '',
                     gouvernorat: '',
                     delegation: '',
-                    localite: '',
+                    
                     ville: '',
                     code_postal: '',
                     gsm: '',
-                    login: '',
-                    password: '',
-                    code_Client: '',
-                    type_Client: '',
+                    
                     id: '',
                     adsl_num:'',
                     new_num_tel:'',
                     prev_num:'',
-                    Remarque:'',
+                    
                     Ticket:'',
                     State:'',
                     CIN:'',
                     NOM:''
-
                 });
-                setFormSave({
-                    name: '',
-                    lastName: '',
-                    tel: '',
-                    rue: '',
-                    gouvernorat: '',
-                    delegation: '',
-                    localite: '',
-                    ville: '',
-                    code_postal: '',
-                    gsm: '',
-                    login: '',
-                    password: '',
-                    code_Client: '',
-                    type_Client: '',
-                    id: '',
-                    adsl_num:'',
-                    new_num_tel:'',
-                    prev_num:'',
-                    Remarque:'',
-                    Ticket:'',
-                    State:'',
-
-                });
-                
             }
         } catch (error) {
             console.error('Error:', error);
         }
     };
 
-    // Function to get cities by governorate
     const [showInput, setShowInput] = useState(false);
     const handleRadioChange = (e) => {
         setShowInput(e.target.value === "Non");
     };
 
-
     function getCitiesByGovernorate(data) {
-      const citiesByGovernorate = {};
-      data.forEach(entry => {
-          const { Gov, Deleg } = entry;
-          if (!citiesByGovernorate[Gov]) {
-              citiesByGovernorate[Gov] = [Deleg];
-          } else {
-              if (!citiesByGovernorate[Gov].includes(Deleg)) {
-                  citiesByGovernorate[Gov].push(Deleg);
-              }
-          }
-      });
-      return citiesByGovernorate;
-  }
+        const citiesByGovernorate = {};
+        data.forEach(entry => {
+            const { Gov, Deleg } = entry;
+            if (!citiesByGovernorate[Gov]) {
+                citiesByGovernorate[Gov] = [Deleg];
+            } else {
+                if (!citiesByGovernorate[Gov].includes(Deleg)) {
+                    citiesByGovernorate[Gov].push(Deleg);
+                }
+            }
+        });
+        return citiesByGovernorate;
+    }
 
-  const citiesByGovernorate = getCitiesByGovernorate(GovDeleg);
-
+    const citiesByGovernorate = getCitiesByGovernorate(GovDeleg);
 
     if (loading) {
         <Loading />
@@ -221,7 +172,7 @@ export default function Line() {
     return (
 
 
-<div className="container mt-5">
+<div style={{ maxWidth: '100%' }}>
         <form className="row justify-content-center" onSubmit={handleSubmit}>
             {loading ? (
                 <Loading />
@@ -240,7 +191,7 @@ export default function Line() {
                                             <div className="col-lg-3 col-md-3 col-form-label">Numéro ADSL *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                <select name="offre" className="form-control" required="" aria-required="true" value={formData.adsl_num} onChange={(e) => setFormData({ ...formData, adsl_num: e.target.value })} >
+                                                <select name="offre" className="form-control"   value={formData.adsl_num} onChange={(e) => setFormData({ ...formData, adsl_num: e.target.value })} >
                                                         <option value='0'>Choisir le numero</option>
                                                         <option value={formData.tel}>{formData.tel}</option>
                                                       
@@ -248,6 +199,8 @@ export default function Line() {
                                                 </div>
                                             </div>
                                           </div>
+                                          
+                                         
                                          
                                           <div className="row mt-3">
                                             <div className="col-lg-3 col-md-3 col-form-label">Nouveau numéro de téléphone * </div>
@@ -258,8 +211,8 @@ export default function Line() {
                                                         className="form-control"
                                                         name="num"
                                                         id="num"
-                                                        required=""
-                                                        aria-required="true"
+                                                          
+                                                        
                                                         value={formData.new_num_tel}
                                                         onChange={(e) => setFormData({ ...formData, new_num_tel: e.target.value })}
                                                     />
@@ -284,32 +237,34 @@ export default function Line() {
 
 
                                         {showInput && (
-                    <div className="row mt-3">
-                        <div className="col-lg-3 col-md-3 col-form-label">Nom du propriaitaire *</div>
-                        <div className="col-lg-9 col-md-9">
-                            <input
+                                            
+                                <div className="row mt-3">
+                                <div className="col-lg-3 col-md-3 col-form-label">Nom du propriaitaire *</div>
+                                <div className="col-lg-9 col-md-9">
+                                <input
                                 type="text"
                                 className="form-control"
                                 name="Nom"
                                 value={formData.NOM}
                                 onChange={(e) => setFormData({ ...formData, NOM: e.target.value })}
-                            />
+                                    />
                             
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-form-label">CIN du propriaitaire *</div>
-                        <div className="col-lg-9 col-md-9">
-                            <input
+                                </div>
+                                <br></br>
+                             <div className="col-lg-3 col-md-3 col-form-label">CIN du propriaitaire *</div>
+                                <div className="col-lg-9 col-md-9">
+                             <input
                                 type="text"
                                 className="form-control"
                                 name="CIN"
                                 value={formData.CIN}
                                 onChange={(e) => setFormData({ ...formData, CIN: e.target.value })}
-                            />
+                                        />
                             
-                        </div>
-                    </div>
+                                    </div>
+                                    </div>
                     
-                )}
+                                )}
 
                                               <div className="mb-3 row">
                                 <label className="col-lg-3 col-md-3 col-form-label">Image</label>
@@ -357,8 +312,8 @@ export default function Line() {
                                                         name="rue"
                                                         id="rue"
                                                         value={formSave.rue}
-                                                        required=""
-                                                        aria-required="true"
+                                                          
+                                                        
                                                         
                                                     />
                                                 </div>
@@ -369,7 +324,7 @@ export default function Line() {
                                             <div className="col-lg-3 col-md-3 col-form-label">Gouvernorat *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <select name="gouvernorat" readOnly className="form-control" required="" aria-required="true" value={formSave.gouvernorat} >
+                                                    <select name="gouvernorat" readOnly className="form-control"     value={formSave.gouvernorat} >
                                                         <option value=""  selected>{formSave.gouvernorat}</option>
                                                         
                                                     </select>
@@ -384,8 +339,8 @@ export default function Line() {
                                                     <select
                                                         name="delegation"
                                                         className="form-control"
-                                                        required=""
-                                                        aria-required="true"
+                                                          
+                                                        
                                                         value={formSave.delegation}
                                                         readOnly
                                                     >
@@ -400,7 +355,7 @@ export default function Line() {
                                             <div className="col-lg-3 col-md-3 col-form-label">Ville *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="ville" id="ville" value={formSave.ville} required="" aria-required="true" readOnly />
+                                                    <input type="text" className="form-control" name="ville" id="ville" value={formSave.ville}     readOnly />
                                                 </div>
                                             </div>
                                         </div>
@@ -409,7 +364,7 @@ export default function Line() {
                                             <div className="col-lg-3 col-md-3 col-form-label">Code postal *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text" className="form-control" name="code_postal" id="code_postal" value={formSave.code_postal} required="" aria-required="true" readOnly />
+                                                    <input type="text" className="form-control" name="code_postal" id="code_postal" value={formSave.code_postal}     readOnly />
                                                 </div>
                                             </div>
                                         </div>
@@ -435,8 +390,8 @@ export default function Line() {
                                                         name="rue"
                                                         id="rue"
                                                         value={formData.rue}
-                                                        required=""
-                                                        aria-required="true"
+                                                          
+                                                        
                                                         onChange={(e) => setFormData({ ...formData, rue: e.target.value })}
                                                         disabled={sameAddress}
                                                     />
@@ -448,7 +403,7 @@ export default function Line() {
                                             <div className="col-lg-3 col-md-3 col-form-label">Gouvernorat *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <select name="gouvernorat" disabled={sameAddress} value={formData.gouvernorat}className="form-control" required="" aria-required="true"  onChange={(e) => setFormData({ ...formData, gouvernorat: e.target.value })}>
+                                                    <select name="gouvernorat" disabled={sameAddress} value={formData.gouvernorat}className="form-control"   aria-required="true"   onChange={(e) => setFormData({ ...formData, gouvernorat: e.target.value })}>
                                                         <option value=""  selected>Sélectionnez un gouvernorat</option>
                                                         {Object.keys(citiesByGovernorate).map((gov, index) => (
                                                             <option key={index} value={gov}>{gov}</option>
@@ -465,8 +420,8 @@ export default function Line() {
                                                     <select
                                                         name="delegation"
                                                         className="form-control"
-                                                        required=""
-                                                        aria-required="true"
+                                                          
+                                                        
                                                         value={formData.delegation}
                                                         onChange={(e) => setFormData({ ...formData, delegation: e.target.value })}
                                                         disabled={sameAddress}
@@ -484,7 +439,7 @@ export default function Line() {
                                             <div className="col-lg-3 col-md-3 col-form-label">Ville *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text"  disabled={sameAddress} className="form-control" name="ville" id="ville"  required="" aria-required="true" value={formData.ville}onChange={(e) => setFormData({ ...formData, ville: e.target.value })} />
+                                                    <input type="text"  disabled={sameAddress} className="form-control" name="ville" id="ville"      value={formData.ville}onChange={(e) => setFormData({ ...formData, ville: e.target.value })} />
                                                 </div>
                                             </div>
                                         </div>
@@ -493,7 +448,7 @@ export default function Line() {
                                             <div className="col-lg-3 col-md-3 col-form-label">Code postal *</div>
                                             <div className="col-lg-9 col-md-9">
                                                 <div className="text-right">
-                                                    <input type="text"  className="form-control" name="code_postal" id="code_postal"  required="" aria-required="true" value={formData.code_postal} onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })}disabled={sameAddress} />
+                                                    <input type="text"  className="form-control" name="code_postal" id="code_postal"      value={formData.code_postal} onChange={(e) => setFormData({ ...formData, code_postal: e.target.value })}disabled={sameAddress} />
                                                 </div>
                                             </div>
                                         </div>
@@ -504,14 +459,18 @@ export default function Line() {
  
                                         
                                     </div>
-                                </div>
+                                </div><div className="card-footer">
+                        <div className="row justify-content-end">
+                            <div className="col-sm-1 text-right">
+                                <button type="submit" className="btn btn-primary btn-sm">Envoyer</button>
                             </div>
                         </div>
                     </div>
+                            </div>
+                        </div>
+                        </div> 
 
-                    <div className='col-sm-4 mt-5 text-right'>
-                        <button type="submit" >Envoyer</button>
-                    </div>
+                    
                     </>
             )}
 

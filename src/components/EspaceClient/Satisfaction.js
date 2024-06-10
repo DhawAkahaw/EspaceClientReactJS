@@ -113,7 +113,7 @@ export default function Satisfaction() {
     }
 
     return (
-        <div className="container">
+        <div style={{ maxWidth: '100%' }}>
             <form onSubmit={handleSubmit}>
                 <div className="card mt-5">
                     <div className="card-body">
@@ -213,13 +213,15 @@ export default function Satisfaction() {
                         </div>
                         
                         
+                    </div> <div className="card-footer">
+                        <div className="row justify-content-end">
+                            <div className="col-sm-1 text-right">
+                                <button type="submit" className="btn btn-primary btn-sm">Envoyer</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div className="form-group row mt-3">
-                    <div className="col-sm-12 text-right">
-                        <button type="submit" className="btn btn-primary">Envoyer</button>
-                    </div>
-                </div>
+               
             </form>
         </div>
     );

@@ -118,7 +118,7 @@ export default function Reclamation() {
     }
 
     return (
-        <div className="container mt-5">
+        <div style={{ maxWidth: '100%' }}>
             <form className="row justify-content-center" onSubmit={handleSubmit}>
                 <div className="col-md-12">
                     <div className="card shadow-sm">
@@ -229,16 +229,20 @@ export default function Reclamation() {
                                         name="Message"
                                         className="form-control"
                                         rows="5"
-                                        placeholder="Type something..."
+                                        
                                         value={formData.Message}
                                         onChange={(e) => setFormData({ ...formData, Message: e.target.value })}
                                     />
                                 </div>
                             </div>
                         </div>
-                        <div className="card-footer text-right">
-                            <button type="submit" className="btn btn-primary">Envoyer</button>
+                        <div className="card-footer">
+                        <div className="row justify-content-end">
+                            <div className="col-sm-1 text-right">
+                                <button type="submit" className="btn btn-primary btn-sm">Envoyer</button>
+                            </div>
                         </div>
+                    </div>
                     </div>
                 </div>
             </form>
